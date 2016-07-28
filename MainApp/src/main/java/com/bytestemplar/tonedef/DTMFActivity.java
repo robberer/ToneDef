@@ -21,10 +21,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.bytestemplar.tonedef.international.CountryTonesRepository;
 import com.bytestemplar.tonedef.tones.ToneBankDTMF;
 import com.bytestemplar.tonedef.touchpad.ToneButtonList;
 import com.bytestemplar.tonedef.touchpad.TouchPadActivity;
 import com.bytestemplar.tonedef.utils.Alert;
+import com.bytestemplar.tonedef.utils.UICustom;
 
 public class DTMFActivity extends TouchPadActivity
 {
@@ -37,6 +39,10 @@ public class DTMFActivity extends TouchPadActivity
     protected void onCreate( Bundle savedInstanceState )
     {
         super.onCreate( savedInstanceState );
+
+        UICustom.init(this);
+        UICustom.getInstance().updateActivity(this);
+        CountryTonesRepository.getInstance(this);
 
         setPreferenceIdentifiers( PREF_DTMF_MARK, PREF_DTMF_SPACE, PREF_DTMF_SHORTDELAY );
 

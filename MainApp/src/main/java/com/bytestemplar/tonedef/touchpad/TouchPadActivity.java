@@ -17,17 +17,22 @@
 
 package com.bytestemplar.tonedef.touchpad;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.ColorFilter;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -92,7 +97,7 @@ public abstract class TouchPadActivity extends Activity implements OnTouchListen
         super.onCreate( savedInstanceState );
 
         setContentView( R.layout.touchpad_container );
-        setVolumeControlStream( AudioManager.STREAM_MUSIC );
+        setVolumeControlStream( AudioManager.MODE_RINGTONE );
         _preferences = PreferenceManager.getDefaultSharedPreferences( this );
 
         _et_dialing_string = (EditText) findViewById( R.id.etDialingString );
@@ -196,14 +201,18 @@ public abstract class TouchPadActivity extends Activity implements OnTouchListen
                     switch ( event.getAction() ) {
                         case MotionEvent.ACTION_DOWN:
                             entry.start();
+                            // @robo
+                            // append button values to EditText field
+                            _et_dialing_string.append(String.valueOf(button.getId()));
+
                             button.getButtonView()
-                                  .setBackgroundResource( R.drawable.touchpadbutton_selected );
+                                    .setBackgroundResource( R.drawable.touchpadbutton_selected );
                             break;
                         case MotionEvent.ACTION_UP:
                         case MotionEvent.ACTION_CANCEL:
                             entry.stop();
                             button.getButtonView()
-                                  .setBackgroundResource( R.drawable.touchpadbutton );
+                                    .setBackgroundResource( R.drawable.touchpadbutton );
                             break;
                         default:
                             break;
@@ -236,7 +245,7 @@ public abstract class TouchPadActivity extends Activity implements OnTouchListen
             }
 
             if ( item.getItemId() == R.id.menu_settings ) {
-                startActivity( new Intent( getApplicationContext(), ConfigActivity.class ) );
+                startActivity(new Intent(getApplicationContext(), ConfigActivity.class));
             }
         }
 
@@ -249,7 +258,7 @@ public abstract class TouchPadActivity extends Activity implements OnTouchListen
         if ( requestCode == ContactList.RESULT_CODE ) {
             String result = ContactList.parseResponse( this, requestCode, resultCode, data );
             if ( result != null ) {
-                _et_dialing_string.setText( result );
+                _et_dialing_string.setText(result);
             }
         }
 
@@ -260,8 +269,23 @@ public abstract class TouchPadActivity extends Activity implements OnTouchListen
     {
         Editable text = _et_dialing_string.getText();
 
-        if ( text != null ) {
-            playDialingString( text.toString() );
+        if (text != null) {
+            /* @robo
+               don't play the number again, i already pressed the buttons with the tone,
+               instead actually dial the number ;-)
+            */
+            //playDialingString( text.toString() );
+            String uriString = "tel:" + text;
+            Intent intent = new Intent(Intent.ACTION_CALL);
+            intent.setData(Uri.parse(uriString));
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CALL_PHONE},
+                        1234);
+            }
+            startActivity(intent);
+            // clear the EditText field
+            _et_dialing_string.setText("");
         }
     }
 
