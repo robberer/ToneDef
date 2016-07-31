@@ -97,7 +97,7 @@ public class SoundGen
                 AudioTrack track = null;
 
                 try {
-                    track = new AudioTrack( AudioManager.STREAM_MUSIC, SAMPLE_RATE_IN_HZ,
+                    track = new AudioTrack( AudioManager.STREAM_RING, SAMPLE_RATE_IN_HZ,
                                             AudioFormat.CHANNEL_OUT_MONO,
                                             AudioFormat.ENCODING_PCM_16BIT,
                                             buffer_size, AudioTrack.MODE_STREAM );

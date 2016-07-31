@@ -97,7 +97,7 @@ public abstract class TouchPadActivity extends Activity implements OnTouchListen
         super.onCreate( savedInstanceState );
 
         setContentView( R.layout.touchpad_container );
-        setVolumeControlStream( AudioManager.MODE_RINGTONE );
+        setVolumeControlStream( AudioManager.STREAM_RING );
         _preferences = PreferenceManager.getDefaultSharedPreferences( this );
 
         _et_dialing_string = (EditText) findViewById( R.id.etDialingString );

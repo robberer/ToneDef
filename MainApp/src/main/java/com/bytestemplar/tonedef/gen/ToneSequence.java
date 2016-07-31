@@ -95,7 +95,7 @@ public class ToneSequence implements Runnable
     private synchronized void initAudioTrack() throws Exception
     {
         try {
-            _track = new AudioTrack( AudioManager.STREAM_MUSIC,
+            _track = new AudioTrack( AudioManager.STREAM_RING,
                                      SAMPLE_RATE,
                                      AudioFormat.CHANNEL_OUT_MONO,
                                      AudioFormat.ENCODING_PCM_16BIT,

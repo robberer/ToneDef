@@ -47,7 +47,7 @@ public class TonePanelActivity extends Activity
     {
         super.onCreate( savedInstanceState );
 
-        this.setVolumeControlStream( AudioManager.STREAM_MUSIC );
+        this.setVolumeControlStream( AudioManager.STREAM_RING );
 
         this._momentary_buttons = new HashMap<Integer, ToneSequence>();
         this._about_buttons = new HashMap<Integer, ToneSequence>();
